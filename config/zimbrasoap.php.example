@@ -1,0 +1,16 @@
+<?php
+/**
+ * Configuracion de la conexion al Servidor Zimbra
+*/
+
+return [
+
+        'servidor' => "ip_server",  //Colocar IP del Servidor Zimbra
+        'puerto'   => 'port',       //Colocar puerto
+        'dominio'  => 'url_zimbra', //Colocar el dominio 
+        'arroba'   => '@',
+        'usuario'  => 'user_admin', //Colocar el usuario administrador de Zimbra
+        'clave'    => 'passwd_admin'//Colocar la clave del usuario administrador de Zimbra
+
+        ];
+?>

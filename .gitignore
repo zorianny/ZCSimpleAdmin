@@ -1,0 +1,11 @@
+vendor/
+node_modules/
+
+.env.*
+.env.php
+.env
+
+*.komodoproject
+.komodotools/
+
+config/zimbrasoap.php
