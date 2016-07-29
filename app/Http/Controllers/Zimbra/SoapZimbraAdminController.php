@@ -50,10 +50,20 @@ class SoapZimbraAdminController extends Controller
      */
 	public function store(Request $request)
 	{
-		$validator = $this->isValid($request);
+		//$validator = $this->isValid($request);
+		$validator = $this->validate($request, [
+        'nombre' => 'required|alpha_num_spaces',
+        'apellido' => 'required|alpha_num_spaces',
+				'cedula' => 'required|numeric',
+				'cuenta' => 'required|alpha_num',
+				'clave' => 'required|min:8|confirmed',
+				'empresa' => 'required|alpha_num_spaces',
+				'profesion' => 'required|alpha_spaces',
+				'pais' => 'required|alpha_spaces',
+				'estado' => 'required|alpha_spaces',
+				'ciudad' => 'required|alpha_spaces'
+    ]);
 		
-		if($validator->passes()) 
-		{
 			//obtener los valores predeterminados para establecer la conexion a Zimbra
 			$server  = config('zimbrasoap.servidor');
 			$port    = config('zimbrasoap.puerto'); 
@@ -61,7 +71,7 @@ class SoapZimbraAdminController extends Controller
 			$arroba  = config('zimbrasoap.arroba');
 			$admin   = config('zimbrasoap.usuario');
 			$clave   = config('zimbrasoap.clave'); 
-			$zimbra  = new SoapZimbra();//25.6.189.215
+			$zimbra  = new SoapZimbra();
 
 			//realizar la autenticacion al servidor Zimbra
 			$zimbra->authZimbra($server, $port, $admin.$arroba.$dominio, $clave);
@@ -72,7 +82,19 @@ class SoapZimbraAdminController extends Controller
 
 			if($codMsg != 0) //si tiene errores de conexion muestra mensaje de error y se detiene el proceso
 			{
-				return view('zimbra/show', ['codError' => $codMsg, 'message' => $msg ]); 
+				return view('zimbra/show', [
+						'codError' => $codMsg,  
+						'message' => $msg, 
+						'nombre' => ucwords(strtolower($request->input('nombre'))), 
+						'apellido' => ucwords(strtolower($request->input('apellido'))),
+						'cedula' => $request->input('cedula'),
+						'cuenta' => $request->input('cuenta').$arroba.$dominio,
+						'empresa' => $request->input('empresa'),
+						'profesion' => $request->input('profesion'),
+						'pais' => $request->input('pais'),
+						'estado' => $request->input('estado'),
+						'ciudad' => $request->input('ciudad')
+						]); 
 			}
 
 			//si la conexion fue establecida con exito continua la creacion de la cuenta
@@ -110,23 +132,6 @@ class SoapZimbraAdminController extends Controller
 				'estado' => $request->input('estado'),
 				'ciudad' => $request->input('ciudad')
 			]); 
-		}
-	}
-	
-	protected function isValid($request)
-	{
-		return $this->validate($request, [
-        'nombre' => 'required|alpha_num_spaces',
-        'apellido' => 'required|alpha_num_spaces',
-				'cedula' => 'required|numeric',
-				'cuenta' => 'required|alpha_num',
-				'clave' => 'required|min:8|confirmed',
-				'empresa' => 'required|alpha_num_spaces',
-				'profesion' => 'required|alpha_spaces',
-				'pais' => 'required|alpha_spaces',
-				'estado' => 'required|alpha_spaces',
-				'ciudad' => 'required|alpha_spaces'
-    ]);
 	}
 	
 }
