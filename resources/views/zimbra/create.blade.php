@@ -176,6 +176,7 @@
 								<button type="submit" class="btn btn-primary">
 									<i class="fa fa-btn fa-plus-circle"></i> Guardar
 								</button>
+								<input type="hidden" name="opcion" value="crear_cuenta"/>
 							</div>
 						</div>
 

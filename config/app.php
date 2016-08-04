@@ -160,6 +160,11 @@ return [
          * Laravel Collative...
          */
         Collective\Html\HtmlServiceProvider::class,
+        
+        /*
+         * Soap Wrapper
+         */
+        Artisaninweb\SoapWrapper\ServiceProvider::class,
 
     ],
 
@@ -212,6 +217,11 @@ return [
         */
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
+        
+        /*
+         * Aliases Soap Wrapper
+         */
+        'SoapWrapper' => 'Artisaninweb\SoapWrapper\Facades\SoapWrapper'
 
     ],
 

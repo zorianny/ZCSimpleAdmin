@@ -40,29 +40,27 @@ class SoapZimbraAdminController extends Controller
   {
   	return view('zimbra/create');
 	}
+	
+	/**
+   * Show view Modificacion de Clave de Correo
+   *
+   * @return \Illuminate\Http\Response
+   */
+	public function modify()
+  {
+  	return view('zimbra/modify');
+	}
 
     /**
      **
-     * Handle a login request to the application.
+     * Funcion que permite la creacion de correos en Zimbra
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
 	public function store(Request $request)
 	{
-		//$validator = $this->isValid($request);
-		$validator = $this->validate($request, [
-        'nombre' => 'required|alpha_num_spaces',
-        'apellido' => 'required|alpha_num_spaces',
-				'cedula' => 'required|numeric',
-				'cuenta' => 'required|alpha_num',
-				'clave' => 'required|min:8|confirmed',
-				'empresa' => 'required|alpha_num_spaces',
-				'profesion' => 'required|alpha_spaces',
-				'pais' => 'required|alpha_spaces',
-				'estado' => 'required|alpha_spaces',
-				'ciudad' => 'required|alpha_spaces'
-    ]);
+			$this->isValid($request);
 		
 			//obtener los valores predeterminados para establecer la conexion a Zimbra
 			$server  = config('zimbrasoap.servidor');
@@ -108,10 +106,21 @@ class SoapZimbraAdminController extends Controller
 				'profesion' => $request->input('profesion'),
 				'pais' => $request->input('pais'),
 				'estado' => $request->input('estado'),
-				'ciudad' => $request->input('ciudad')
+				'ciudad' => $request->input('ciudad'),
+				'opcion' => $request->input('opcion'),
 							 );
 			//crear cuenta de correo en Zimbra
-			$zimbra->createAccountZimbra($datos);
+			switch($request->input('opcion')){
+				case 'crear_cuenta':
+					$zimbra->createAccountZimbra($datos);		
+					break;
+				case 'cambiar_clave':
+					$zimbra->modifyAccountZimbra($datos);
+					break;
+				default:
+					break;
+			}
+			
 
 			//capturar errores si existen al crear la cuenta
 			$msg    = $zimbra->getMsgError();
@@ -132,6 +141,52 @@ class SoapZimbraAdminController extends Controller
 				'estado' => $request->input('estado'),
 				'ciudad' => $request->input('ciudad')
 			]); 
+	}
+	
+	/**
+	 *
+	 *
+	 */
+	public function isValid($request)
+	{
+		switch($request->input('opcion'))
+		{
+			case 'crear_cuenta':
+				$validator = $this->validate($request, [
+					'nombre' => 'required|alpha_num_spaces',
+					'apellido' => 'required|alpha_num_spaces',
+					'cedula' => 'required|numeric',
+					'cuenta' => 'required|alpha_num_point',
+					'clave' => 'required|min:8|confirmed',
+					'empresa' => 'required|alpha_num_spaces',
+					'profesion' => 'required|alpha_spaces',
+					'pais' => 'required|alpha_spaces',
+					'estado' => 'required|alpha_spaces',
+					'ciudad' => 'required|alpha_spaces'
+				]);
+				break;
+			case 'cambiar_clave':
+				$validator = $this->validate($request, [
+					'cuenta' => 'required|alpha_num',
+					'clave' => 'required|min:8|confirmed',
+				]);
+				break;
+			default:
+				$validator = $this->validate($request, [
+					'nombre' => 'required|alpha_num_spaces',
+					'apellido' => 'required|alpha_num_spaces',
+					'cedula' => 'required|numeric',
+					'cuenta' => 'required|alpha_num_point',
+					'clave' => 'required|min:8|confirmed',
+					'empresa' => 'required|alpha_num_spaces',
+					'profesion' => 'required|alpha_spaces',
+					'pais' => 'required|alpha_spaces',
+					'estado' => 'required|alpha_spaces',
+					'ciudad' => 'required|alpha_spaces'
+				]);
+				break;
+		}
+		
 	}
 	
 }

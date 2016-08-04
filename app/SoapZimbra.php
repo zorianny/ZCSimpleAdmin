@@ -14,8 +14,18 @@ class SoapZimbra
   protected $SOAPhandle;
 	protected $faultErrorReason='';
 	protected $faultErrorCode='0';
+	protected $responseBody='';
 
-  public function authZimbra($server, $port, $username, $password) 
+  /**
+	 * Description: Funcion que permite la autenticacion en el Servidor Zimbra
+	 * Parameters:
+	 * 			@server: Direccion IP del Servidor Zimbra
+	 * 			@port: Puerto del servicio
+	 * 			@username: Nombre de usuario administrador de Zimbra
+	 * 			@password: Clave del usuario administrador de Zimbra
+	 * Return: void
+	 */
+	public function authZimbra($server, $port, $username, $password) 
 	{
   	$url = "https://" . $server . ":".$port."/service/admin/soap/";
 		$handle = curl_init();
@@ -64,6 +74,11 @@ class SoapZimbra
 		return;
 	}
 
+	/**
+	 * Funcion que permite Crear Cuentas de Correo en Zimbra
+	 *
+	 *
+	 */
 	public function createAccountZimbra($datos) {
 		$SOAPrequest = //$email, $password, $name, $surname
          '<?xml version="1.0" encoding="ISO-8859-1"?>'.
@@ -87,8 +102,6 @@ class SoapZimbra
 								'<a n="l">'.utf8_encode($datos["ciudad"]).'</a>'.
 								'<a n="title">'.$datos["profesion"].'</a>'.
 								'<a n="company">'.$datos["empresa"].'</a>'.
-								//'<company>Ministerio Publico</company>'.
-								//'<a n="jobTitle">Ministerio Publico</a>'.
              '</CreateAccountRequest>'.
           '</soap:Body>'.
           '</soap:Envelope>';
@@ -113,7 +126,7 @@ class SoapZimbra
 	}
 	
 	/**
-	 *
+	 * Funcion que asigna el mensaje de error que corresponde
 	 *
 	 */
 	public function setMsgError($error)
@@ -133,7 +146,7 @@ class SoapZimbra
 	}
 	
 	/**
-	 *
+	 * Funcion que devuelve el mensaje de error
 	 *
 	 */
 	public function getMsgError()
@@ -142,7 +155,7 @@ class SoapZimbra
 	}
 	
 	/**
-	 *
+	 * Funcion que obtiene el codigo del error
 	 *
 	 */
 	public function getCodeError()
@@ -151,7 +164,7 @@ class SoapZimbra
 	}
 
    /**
-   *
+   * Funcion que despliega los valores de las variables request y response del web service
    * 
    */
 	function showDebug() {
@@ -171,10 +184,17 @@ class SoapZimbra
 		echo '<br>Nro Error: '.$this->faultErrorCode. ' '.$this->faultErrorReason;
 	}
 	
+	/**
+	 * Funcion que captura si la respuesta del web service es un error 
+	 *
+	 */
 	public function clearResponse()
 	{
 		$clean_xml = str_ireplace(['SOAP-ENV:', 'SOAP:'], '', $this->response);
 		$xml = simplexml_load_string($clean_xml);
+		
+		$this->responseBody = $xml->Body;
+		
 		if(isset($xml->Body->Fault->Reason->Text))
 			$this->faultErrorReason = $xml->Body->Fault->Reason->Text;
 		if(isset($xml->Body->Fault->Detail->Error->Code))
@@ -182,16 +202,28 @@ class SoapZimbra
 		return;
 	}
 	
+	/**
+	 * Funcion que obtiene el codigo de error de Zimbra
+	 *
+	 */
 	public function getCodeErrorZimbra()
 	{
 		return $this->faultErrorCode;
 	}
 	
+	/**
+	 * Funcion que obtiene el detalle del error de Zimbra
+	 *
+	 */
 	public function getDetalleErrorZimbra()
 	{
 		return $this->faultErrorReason;
 	}
 	
+	/**
+	 * Funcion que descifra el error del web service de zimbra
+	 *
+	 */
 	public function getErrorZimbra()
 	{
 		$this->error = 99;
@@ -208,17 +240,108 @@ class SoapZimbra
 				$this->message = "La contrase&ntilde;a es inv&aacute;lida.";
 				break;
 			default:
-				$this->message = "Error al crear la cuenta. Consulte con su Administrador de Sistemas. <br/>C&oacute;digo: ".$this->faultErrorCode." <br/>Motivo: ".$this->faultErrorReason;
+				$this->message = "Error de Sistema. Consulte con su Administrador de Sistemas."; //CORREGIR
+				//<br/>C&oacute;digo: ".$this->faultErrorCode." <br/>Motivo: ".$this->faultErrorReason;
 				break;
 		}
 		return;
 	}
 	
+	/**
+	 * Funcion que traduce el XML de respuesta del Web Service SOAP de Zimbra
+	 *
+	 */
 	public function translateResponseXML()
 	{
 		$this->clearResponse();
 		$this->getErrorZimbra();
-	}		
+	}
 	
+	/**
+	 * Description: Funcion que permite modificar una cuenta de correo Zimbra
+	 *
+	 */
+	public function modifyAccountZimbra($datos)
+	{
+		$cuenta = $datos['cuenta'];
+		$this->getAccountZimbra($cuenta);
+		switch ($datos['opcion'])
+		{
+			case 'cambiar_clave':
+				$SOAPrequest = 
+         '<?xml version="1.0" encoding="ISO-8859-1"?>'.
+          '<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope">'.
+          '<soap:Header>'.
+             '<context xmlns="urn:zimbra">'.
+                '<authToken>' . $this->authToken . '</authToken>'.
+                '<sessionId id="' . $this->sessionId . '">' . $this->sessionId . '</sessionId>'.
+             '</context>'.
+          '</soap:Header>'.
+          '<soap:Body>'.
+             '<GetAccountRequest xmlns="urn:zimbraAdmin">'.
+                '<account by="name">' . $datos["cuenta"] . '</account>'.
+             '</GetAccountRequest>'.
+          '</soap:Body>'.
+          '</soap:Envelope>';
+				break;
+			defaut:
+				break;		
+		}
+
+		$handle = $this->SOAPhandle;
+		curl_setopt($handle, CURLOPT_POSTFIELDS, $SOAPrequest);
+		$SOAPresponse = curl_exec($handle);
+ 
+		if (!$SOAPresponse) {
+			$this->error = curl_errno($handle);
+			$this->setMsgError($this->error);				
+		}
+
+		$this->response = $SOAPresponse;
+		$this->request = $SOAPrequest;
+		$this->SOAPhandle = $handle;
+		
+		$this->translateResponseXML();
+     
+		return;		
+	}
+	
+	
+	public function getAccountZimbra($cuenta) 
+	{
+		$SOAPrequest = 
+      '<?xml version="1.0" encoding="ISO-8859-1"?>'.
+        '<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope">'.
+				  '<soap:Header>'.
+            '<context xmlns="urn:zimbra">'.
+              '<authToken>' . $this->authToken . '</authToken>'.
+              '<sessionId id="' . $this->sessionId . '">' . $this->sessionId . '</sessionId>'.
+            '</context>'.
+					'</soap:Header>'.
+					'<soap:Body>'.
+					  '<GetAccountRequest xmlns="urn:zimbraAdmin">'.
+					    '<account by="name">' . $cuenta . '</account>'.
+					  '</GetAccountRequest>'.
+					'</soap:Body>'.
+				'</soap:Envelope>';
+ 
+		$handle = $this->SOAPhandle;
+		curl_setopt($handle, CURLOPT_POSTFIELDS, $SOAPrequest);
+		$SOAPresponse = curl_exec($handle);
+ 
+		if (!$SOAPresponse) {
+			$this->error = curl_errno($handle);
+			$this->setMsgError($this->error);				
+		}
+
+		$this->response = $SOAPresponse;
+		$this->request = $SOAPrequest;
+		$this->SOAPhandle = $handle;
+		
+		$this->translateResponseXML();
+     
+		return;
+	}
+
 }
 ?>
