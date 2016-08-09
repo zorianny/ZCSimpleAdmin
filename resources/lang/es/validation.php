@@ -36,6 +36,7 @@ return array(
 	),
 	"boolean"        => "El campo :attribute debe ser verdadero o falso.",
 	"confirmed"      => "El campo de confirmación de :attribute no coincide.",
+  "cuenta_punto"   => "El campo :attribute sólo puede contener letras, números y un punto como separador.",
 	"date"           => "El campo :attribute no es una fecha válida.",
 	"date_format" 	 => "El campo :attribute no corresponde con el formato :format.",
 	"different"      => "Los campos :attribute y :other deben ser diferentes.",

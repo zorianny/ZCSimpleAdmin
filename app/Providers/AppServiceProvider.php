@@ -29,10 +29,10 @@ class AppServiceProvider extends ServiceProvider
 
     	});
 		
-		Validator::extend('alpha_num_point', function ($attribute, $value) {
+		Validator::extend('cuenta_punto', function ($attribute, $value) {
 
         // This will only accept alpha, numbers and spaces. 
-        return preg_match('/^[\pL\pN.]+$/u', $value); 
+        return preg_match('/^[\pL\pN]{1,}\.[\pL\pN]+$/u', $value); 
 
     	});
     }
