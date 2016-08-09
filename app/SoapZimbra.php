@@ -101,7 +101,7 @@ class SoapZimbra
 								'<a n="st">'.$datos["estado"].'</a>'.
 								'<a n="l">'.utf8_encode($datos["ciudad"]).'</a>'.
 								'<a n="title">'.$datos["profesion"].'</a>'.
-								'<a n="company">'.$datos["empresa"].'</a>'.
+								'<a n="company">'.$datos["direccion"].'</a>'.
              '</CreateAccountRequest>'.
           '</soap:Body>'.
           '</soap:Envelope>';

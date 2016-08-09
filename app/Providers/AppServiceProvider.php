@@ -35,6 +35,13 @@ class AppServiceProvider extends ServiceProvider
         return preg_match('/^[\pL\pN]{1,}\.[\pL\pN]+$/u', $value); 
 
     	});
+		
+		Validator::extend('alpha_num_special_char', function ($attribute, $value) {
+
+        // This will only accept alpha, numbers and spaces. 
+        return preg_match('/^[\pL\pN\.\-\s]+$/u', $value); 
+
+    	});
     }
 
     /**

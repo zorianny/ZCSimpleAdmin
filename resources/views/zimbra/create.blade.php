@@ -101,14 +101,14 @@
 						</div>
 					
 					<!-- Empresa -->
-						<div class="form-group{{ $errors->has('empresa') ? ' has-error' : '' }}">
-							{!! Form::label('empresa', 'Direcci&oacute;n de Adscripci&oacute;n', ['class' => 'col-md-4 control-label']) !!}
+						<div class="form-group{{ $errors->has('direccion') ? ' has-error' : '' }}">
+							{!! Form::label('direccion', 'Direcci&oacute;n de Adscripci&oacute;n', ['class' => 'col-md-4 control-label']) !!}
 							<div class="col-md-6">
-								{!! Form::text('empresa', old('empresa'),['class' => 'form-control']	)!!}
+								{!! Form::text('direccion', old('direccion'),['class' => 'form-control']	)!!}
 									
-								@if ($errors->has('empresa'))
+								@if ($errors->has('direccion'))
 									<span class="help-block">
-										<strong>{{ $errors->first('empresa') }}</strong>
+										<strong>{{ $errors->first('direccion') }}</strong>
 									</span>
 								@endif
 							</div>

@@ -21,7 +21,7 @@
 							<b>Apellido:</b> {!! $apellido !!}  <br/>
 							<b>Direcci&oacute;n de Correo:</b> {!! $cuenta!!}  <br/>
 							<b>C&eacute;dula de Identidad:</b> {!! $cedula!!}  <br/>
-							<b>Empresa:</b> {!! $empresa !!}   <br/>
+							<b>Empresa:</b> {!! $direccion !!}   <br/>
 							<b>T&iacute;tulo Profesional:</b> {!! $profesion !!}  <br/>
 							<b>Pa&iacute;s:</b> {!! $pais !!}  <br/>
 							<b>Estado:</b> {!! $estado !!}  <br/>
