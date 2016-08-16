@@ -28,12 +28,11 @@
 							</div>
 						</div>
 
-					<!-- Clave-->
+					<!-- Clave>
 						<div class="form-group{{ $errors->has('clave') ? ' has-error' : '' }}">
 							{!! Form::label('clave', 'Contrase&ntilde;a', ['class' => 'col-md-4 control-label']) !!}
 							<div class="col-md-3">
-								<!--{!! Form::password('clave', ['class' => 'form-control']) !!}-->
-								<input name='clave' type="password" class='form-control' />
+								{!! Form::password('clave', ['class' => 'form-control']) !!}
 								
 								@if ($errors->has('clave'))
 									<span class="help-block">
@@ -41,14 +40,13 @@
 									</span>
 								@endif
 							</div>
-						</div>
+						</div-->
 					
-					<!-- Confirmacion de Clave-->
+					<!-- Confirmacion de Clave>
 						<div class="form-group{{ $errors->has('clave_confirmation') ? ' has-error' : '' }}">
 							{!! Form::label('clave_confirmation', 'Confirmar Contrase&ntilde;a', ['class' => 'col-md-4 control-label']) !!}
 							<div class="col-md-3">
-								<!--{!! Form::password('confirmar_clave', ['class' => 'form-control']) !!}-->
-								<input name='clave_confirmation' type="password" class='form-control' />
+								{!! Form::password('confirmar_clave', ['class' => 'form-control']) !!}
 								
 								@if ($errors->has('clave_confirmation'))
 									<span class="help-block">
@@ -56,13 +54,13 @@
 									</span>
 								@endif
 							</div>
-						</div>
+						</div-->
 								
 					<!-- Boton de aceptar-->
 						<div class="form-group">
 							<div class="col-md-6 col-md-offset-4">
 								<button type="submit" class="btn btn-primary">
-									<i class="fa fa-btn fa-plus-circle"></i> Guardar
+									<i class="fa fa-btn fa-plus-circle"></i> Reiniciar clave
 								</button>
 								<input type="hidden" name="opcion" value="cambiar_clave"/>
 							</div>

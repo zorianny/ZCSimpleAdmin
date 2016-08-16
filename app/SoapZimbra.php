@@ -227,7 +227,7 @@ class SoapZimbra
 	public function getErrorZimbra()
 	{
 		$this->error = 99;
-		switch($this->faultErrorCode)
+		switch($this->getCodeErrorZimbra())
 		{
 			case "0":
 				$this->message = "Datos almacenados correctamente.";
@@ -238,6 +238,9 @@ class SoapZimbra
 				break;
 			case "account.INVALID_PASSWORD":
 				$this->message = "La contrase&ntilde;a es inv&aacute;lida.";
+				break;
+			case "account.NO_SUCH_ACCOUNT":
+				$this->message = "La cuenta de correo no existe.";
 				break;
 			default:
 				$this->message = "Error de Sistema. Consulte con su Administrador de Sistemas."; //CORREGIR
@@ -265,43 +268,55 @@ class SoapZimbra
 	{
 		$cuenta = $datos['cuenta'];
 		$this->getAccountZimbra($cuenta);
-		switch ($datos['opcion'])
-		{
-			case 'cambiar_clave':
-				$SOAPrequest = 
-         '<?xml version="1.0" encoding="ISO-8859-1"?>'.
-          '<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope">'.
-          '<soap:Header>'.
-             '<context xmlns="urn:zimbra">'.
-                '<authToken>' . $this->authToken . '</authToken>'.
-                '<sessionId id="' . $this->sessionId . '">' . $this->sessionId . '</sessionId>'.
-             '</context>'.
-          '</soap:Header>'.
-          '<soap:Body>'.
-             '<GetAccountRequest xmlns="urn:zimbraAdmin">'.
-                '<account by="name">' . $datos["cuenta"] . '</account>'.
-             '</GetAccountRequest>'.
-          '</soap:Body>'.
-          '</soap:Envelope>';
-				break;
-			defaut:
-				break;		
-		}
-
-		$handle = $this->SOAPhandle;
-		curl_setopt($handle, CURLOPT_POSTFIELDS, $SOAPrequest);
-		$SOAPresponse = curl_exec($handle);
- 
-		if (!$SOAPresponse) {
-			$this->error = curl_errno($handle);
-			$this->setMsgError($this->error);				
-		}
-
-		$this->response = $SOAPresponse;
-		$this->request = $SOAPrequest;
-		$this->SOAPhandle = $handle;
 		
-		$this->translateResponseXML();
+		//capturar error si existe
+		$error = $this->getCodeError();
+
+		//si no hay error entonces continuar
+		if($error == 0)
+		{
+			$prevId = substr($this->response, strpos($this->response,'<a n="zimbraId">'),strlen($this->response));
+			$idZimbra = substr($prevId,strlen('<a n="zimbraId">'),strpos($prevId,'</a>') - strlen('<a n="zimbraId">'));
+			
+			switch ($datos['opcion'])
+			{
+				case 'cambiar_clave':
+					$SOAPrequest = 
+					 '<?xml version="1.0" encoding="ISO-8859-1"?>'.
+						'<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope">'.
+						'<soap:Header>'.
+							 '<context xmlns="urn:zimbra">'.
+									'<authToken>' . $this->authToken . '</authToken>'.
+									'<sessionId id="' . $this->sessionId . '">' . $this->sessionId . '</sessionId>'.
+							 '</context>'.
+						'</soap:Header>'.
+						'<soap:Body>'.
+							 '<ModifyAccountRequest xmlns="urn:zimbraAdmin" id="'.$idZimbra.'">'.
+									'<password>' . $datos["clave"] . '</password>'.
+									'<a n="zimbraPasswordMustChange">TRUE</a>'.
+							 '</ModifyAccountRequest>'.
+						'</soap:Body>'.
+						'</soap:Envelope>';
+					break;
+				defaut:
+					break;		
+			}
+	
+			$handle = $this->SOAPhandle;
+			curl_setopt($handle, CURLOPT_POSTFIELDS, $SOAPrequest);
+			$SOAPresponse = curl_exec($handle);
+	 
+			if (!$SOAPresponse) {
+				$this->error = curl_errno($handle);
+				$this->setMsgError($this->error);				
+			}
+	
+			$this->response = $SOAPresponse;
+			$this->request = $SOAPrequest;
+			$this->SOAPhandle = $handle;
+			
+			$this->translateResponseXML();
+		}
      
 		return;		
 	}

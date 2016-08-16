@@ -70,12 +70,11 @@
 							</div>
 						</div>
 					
-					<!-- Clave-->
+					<!-- Clave>
 						<div class="form-group{{ $errors->has('clave') ? ' has-error' : '' }}">
 							{!! Form::label('clave', 'Contrase&ntilde;a', ['class' => 'col-md-4 control-label']) !!}
 							<div class="col-md-3">
-								<!--{!! Form::password('clave', ['class' => 'form-control']) !!}-->
-								<input name='clave' type="password" class='form-control' />
+								{!! Form::password('clave', ['class' => 'form-control']) !!}
 								
 								@if ($errors->has('clave'))
 									<span class="help-block">
@@ -83,14 +82,13 @@
 									</span>
 								@endif
 							</div>
-						</div>
+						</div-->
 					
-					<!-- Confirmacion de Clave-->
+					<!-- Confirmacion de Clave>
 						<div class="form-group{{ $errors->has('clave_confirmation') ? ' has-error' : '' }}">
 							{!! Form::label('clave_confirmation', 'Confirmar Contrase&ntilde;a', ['class' => 'col-md-4 control-label']) !!}
 							<div class="col-md-3">
-								<!--{!! Form::password('confirmar_clave', ['class' => 'form-control']) !!}-->
-								<input name='clave_confirmation' type="password" class='form-control' />
+								{!! Form::password('clave_confirmation', ['class' => 'form-control']) !!}
 								
 								@if ($errors->has('clave_confirmation'))
 									<span class="help-block">
@@ -98,7 +96,7 @@
 									</span>
 								@endif
 							</div>
-						</div>
+						</div-->
 					
 					<!-- Empresa -->
 						<div class="form-group{{ $errors->has('direccion') ? ' has-error' : '' }}">

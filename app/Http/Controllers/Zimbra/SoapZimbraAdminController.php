@@ -8,6 +8,9 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use App\SoapZimbra;
+use Artisaninweb\SoapWrapper\Facades\SoapWrapper;
+
+use App\Http\Wsdl;
 
 class SoapZimbraAdminController extends Controller
 {
@@ -61,14 +64,18 @@ class SoapZimbraAdminController extends Controller
 	public function store(Request $request)
 	{
 			$this->isValid($request);
+			
+			//$this->demo();
 		
 			//obtener los valores predeterminados para establecer la conexion a Zimbra
 			$server  = config('zimbrasoap.servidor');
 			$port    = config('zimbrasoap.puerto'); 
 			$dominio = config('zimbrasoap.dominio'); 
 			$arroba  = config('zimbrasoap.arroba');
-			$admin   = config('zimbrasoap.usuario');
-			$clave   = config('zimbrasoap.clave'); 
+			$admin   = config('zimbrasoap.usuario_admin');
+			$clave   = config('zimbrasoap.clave_admin');
+			//para creacion y modificacion de cuentas
+			$clave_por_defecto   = config('zimbrasoap.clave_por_defecto');
 			$zimbra  = new SoapZimbra();
 
 			//realizar la autenticacion al servidor Zimbra
@@ -98,7 +105,7 @@ class SoapZimbraAdminController extends Controller
 			//si la conexion fue establecida con exito continua la creacion de la cuenta
 			$datos = array(
 				'cuenta' => $request->input('cuenta').$arroba.$dominio,
-				'clave'  => $request->input('clave'),
+				'clave'  => $clave_por_defecto,
 				'nombre' => ucwords(strtolower($request->input('nombre'))),
 				'apellido' => ucwords(strtolower($request->input('apellido'))),
 				'cedula' => $request->input('cedula'),
@@ -120,8 +127,7 @@ class SoapZimbraAdminController extends Controller
 				default:
 					break;
 			}
-			
-
+		
 			//capturar errores si existen al crear la cuenta
 			$msg    = $zimbra->getMsgError();
 			$codMsg = $zimbra->getCodeError();
@@ -157,7 +163,7 @@ class SoapZimbraAdminController extends Controller
 					'apellido' => 'required|alpha_num_spaces',
 					'cedula' => 'required|numeric',
 					'cuenta' => 'required|cuenta_punto',
-					'clave' => 'required|min:8|confirmed',
+					//'clave' => 'required|min:8|confirmed',
 					'direccion' => 'required|alpha_num_special_char',
 					'profesion' => 'required|alpha_spaces',
 					'pais' => 'required|alpha_spaces',
@@ -167,8 +173,8 @@ class SoapZimbraAdminController extends Controller
 				break;
 			case 'cambiar_clave':
 				$validator = $this->validate($request, [
-					'cuenta' => 'required|alpha_num',
-					'clave' => 'required|min:8|confirmed',
+					'cuenta' => 'required|cuenta_punto',
+					//'clave' => 'required|min:8|confirmed',
 				]);
 				break;
 			default:
@@ -177,7 +183,7 @@ class SoapZimbraAdminController extends Controller
 					'apellido' => 'required|alpha_num_spaces',
 					'cedula' => 'required|numeric',
 					'cuenta' => 'required|cuenta_punto',
-					'clave' => 'required|min:8|confirmed',
+					//'clave' => 'required|min:8|confirmed',
 					'direccion' => 'required|alpha_num_special_char',
 					'profesion' => 'required|alpha_spaces',
 					'pais' => 'required|alpha_spaces',
@@ -189,4 +195,35 @@ class SoapZimbraAdminController extends Controller
 		
 	}
 	
+	public function demo()
+  {
+		// Add a new service to the wrapper
+    SoapWrapper::add(function ($service) {
+      $service
+        ->name('zimbra')
+        //->wsdl('http://currencyconverter.kowabunga.net/converter.asmx?WSDL')
+        //->wsdl('https://25.6.189.215:7071/service/admin/soap')
+				->wsdl('ZimbraAdminService.wsdl')
+				->trace(true);
+    });
+		
+		$data = [
+      /*'CurrencyFrom' => 'EUR',
+      'CurrencyTo'   => 'USD',
+      'RateDate'     => '2014-06-05',
+      'Amount'       => '73.71'*/
+			'name' => 'admin',
+			'password' => '12345678'
+    ];
+
+    // Using the added service
+    SoapWrapper::service('zimbra', function ($service)  {
+			echo "<pre>";
+        var_dump($service->getFunctions());
+        //var_dump($service->call('GetConversionAmount', [$data])->GetConversionAmountResult);
+			echo "</pre>";
+    });
+		die();
+  }
+		
 }

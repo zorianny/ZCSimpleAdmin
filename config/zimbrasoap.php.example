@@ -8,9 +8,10 @@ return [
         'servidor' => "ip_server",  //Colocar IP del Servidor Zimbra
         'puerto'   => 'port',       //Colocar puerto
         'dominio'  => 'url_zimbra', //Colocar el dominio 
-        'arroba'   => '@',
-        'usuario'  => 'user_admin', //Colocar el usuario administrador de Zimbra
-        'clave'    => 'passwd_admin'//Colocar la clave del usuario administrador de Zimbra
+        'arroba'   => '@',          //No modificar
+        'usuario_admin'  => 'user_admin', //Colocar el usuario administrador de Zimbra
+        'clave_admin'    => 'passwd_admin',//Colocar la clave del usuario administrador de Zimbra
+        'clave_por_defecto' => '12345678'  //Clave que se le asignara a cada usuario creado o cuando se modifique la clave
 
         ];
 ?>
