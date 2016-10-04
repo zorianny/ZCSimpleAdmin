@@ -275,6 +275,7 @@ class SoapZimbra
 		//si no hay error entonces continuar
 		if($error == 0)
 		{
+			//obteniendo el ID de la cuenta de correo
 			$prevId = substr($this->response, strpos($this->response,'<a n="zimbraId">'),strlen($this->response));
 			$idZimbra = substr($prevId,strlen('<a n="zimbraId">'),strpos($prevId,'</a>') - strlen('<a n="zimbraId">'));
 			
@@ -292,7 +293,7 @@ class SoapZimbra
 						'</soap:Header>'.
 						'<soap:Body>'.
 							 '<ModifyAccountRequest xmlns="urn:zimbraAdmin" id="'.$idZimbra.'">'.
-									'<password>' . $datos["clave"] . '</password>'.
+									'<a n="userPassword">' . $datos["clave"] . '</a>'.
 									'<a n="zimbraPasswordMustChange">TRUE</a>'.
 							 '</ModifyAccountRequest>'.
 						'</soap:Body>'.

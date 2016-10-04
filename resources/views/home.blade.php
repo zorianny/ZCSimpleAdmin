@@ -11,12 +11,12 @@
 	  	<div class="col-md-3 col-sd-12">
 	  		<a href="{!! route('correoZimbra.modify') !!}"><img src="{!! url('img/opcion2.png') !!}" alt="Cambio de Clave" title="Cambio de Clave" class="img-circle"></a>
 	  	</div>
-	  	<div class="col-md-3 col-sd-12">
+	  	<!--div class="col-md-3 col-sd-12">
 	  		<a href="#"><img src="{!! url('img/icono.png') !!}" alt="Sin opci&oacute;n" title="Sin opci&oacute;n" class="img-circle"></a>
 	  	</div>
 	  	<div class="col-md-3 col-sd-12">
 	  		<a href="#"><img src="{!! url('img/icono.png') !!}" alt="Sin opci&oacute;n" title="Sin opci&oacute;n" class="img-circle"></a>
-	  	</div>
+	  	</div-->
 		</div>
 	</div>
 	@endif

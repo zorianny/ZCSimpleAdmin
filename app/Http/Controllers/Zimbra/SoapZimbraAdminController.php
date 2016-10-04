@@ -203,7 +203,9 @@ class SoapZimbraAdminController extends Controller
         ->name('zimbra')
         //->wsdl('http://currencyconverter.kowabunga.net/converter.asmx?WSDL')
         //->wsdl('https://25.6.189.215:7071/service/admin/soap')
-				->wsdl('ZimbraAdminService.wsdl')
+				//->wsdl('https://zimbra.example.com/service/wsdl/ZimbraAdminService.wsdl')
+				//->wsdl('ZimbraAdminService.wsdl')
+				->wsdl('https://25.6.189.215:7071/service/wsdl/ZimbraAdminService.wsdl?WSDL')
 				->trace(true);
     });
 		
