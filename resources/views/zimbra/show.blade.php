@@ -16,16 +16,36 @@
 						<div class="alert alert-success" role="alert">
 							{!! $message !!}
 						</div>
-						@endif	
-							<b>Nombre:</b> {!! $nombre !!} <br/>
-							<b>Apellido:</b> {!! $apellido !!}  <br/>
-							<b>Direcci&oacute;n de Correo:</b> {!! $cuenta!!}  <br/>
-							<b>C&eacute;dula de Identidad:</b> {!! $cedula!!}  <br/>
-							<b>Empresa:</b> {!! $empresa !!}   <br/>
-							<b>T&iacute;tulo Profesional:</b> {!! $profesion !!}  <br/>
-							<b>Pa&iacute;s:</b> {!! $pais !!}  <br/>
-							<b>Estado:</b> {!! $estado !!}  <br/>
-							<b>Ciudad:</b> {!! $ciudad !!}	 <br/>	
+						@endif
+						@if ($codError == 0)
+							@if ($nombre)
+								<b>Nombre:</b> {!! $nombre !!} <br/>
+							@endif
+							@if ($apellido)
+								<b>Apellido:</b> {!! $apellido !!}  <br/>
+							@endif
+							@if ($cuenta)
+								<b>Direcci&oacute;n de Correo:</b> {!! $cuenta!!}  <br/>
+							@endif
+							@if ($cedula)
+								<b>C&eacute;dula de Identidad:</b> {!! $cedula!!}  <br/>
+							@endif
+							@if ($direccion)
+								<b>Empresa:</b> {!! $direccion !!}   <br/>
+							@endif
+							@if ($profesion)
+								<b>T&iacute;tulo Profesional:</b> {!! $profesion !!}  <br/>
+							@endif
+							@if ($pais)
+								<b>Pa&iacute;s:</b> {!! $pais !!}  <br/>
+							@endif
+							@if ($estado)
+								<b>Estado:</b> {!! $estado !!}  <br/>
+							@endif
+							@if ($ciudad)
+								<b>Ciudad:</b> {!! $ciudad !!}	 <br/>
+							@endif
+						@endif
 					</div>
 				
 				</div>

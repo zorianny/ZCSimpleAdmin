@@ -70,12 +70,11 @@
 							</div>
 						</div>
 					
-					<!-- Clave-->
+					<!-- Clave>
 						<div class="form-group{{ $errors->has('clave') ? ' has-error' : '' }}">
 							{!! Form::label('clave', 'Contrase&ntilde;a', ['class' => 'col-md-4 control-label']) !!}
 							<div class="col-md-3">
-								<!--{!! Form::password('clave', ['class' => 'form-control']) !!}-->
-								<input name='clave' type="password" class='form-control' />
+								{!! Form::password('clave', ['class' => 'form-control']) !!}
 								
 								@if ($errors->has('clave'))
 									<span class="help-block">
@@ -83,14 +82,13 @@
 									</span>
 								@endif
 							</div>
-						</div>
+						</div-->
 					
-					<!-- Confirmacion de Clave-->
+					<!-- Confirmacion de Clave>
 						<div class="form-group{{ $errors->has('clave_confirmation') ? ' has-error' : '' }}">
 							{!! Form::label('clave_confirmation', 'Confirmar Contrase&ntilde;a', ['class' => 'col-md-4 control-label']) !!}
 							<div class="col-md-3">
-								<!--{!! Form::password('confirmar_clave', ['class' => 'form-control']) !!}-->
-								<input name='clave_confirmation' type="password" class='form-control' />
+								{!! Form::password('clave_confirmation', ['class' => 'form-control']) !!}
 								
 								@if ($errors->has('clave_confirmation'))
 									<span class="help-block">
@@ -98,17 +96,17 @@
 									</span>
 								@endif
 							</div>
-						</div>
+						</div-->
 					
 					<!-- Empresa -->
-						<div class="form-group{{ $errors->has('empresa') ? ' has-error' : '' }}">
-							{!! Form::label('empresa', 'Direcci&oacute;n de Adscripci&oacute;n', ['class' => 'col-md-4 control-label']) !!}
+						<div class="form-group{{ $errors->has('direccion') ? ' has-error' : '' }}">
+							{!! Form::label('direccion', 'Direcci&oacute;n de Adscripci&oacute;n', ['class' => 'col-md-4 control-label']) !!}
 							<div class="col-md-6">
-								{!! Form::text('empresa', old('empresa'),['class' => 'form-control']	)!!}
+								{!! Form::text('direccion', old('direccion'),['class' => 'form-control']	)!!}
 									
-								@if ($errors->has('empresa'))
+								@if ($errors->has('direccion'))
 									<span class="help-block">
-										<strong>{{ $errors->first('empresa') }}</strong>
+										<strong>{{ $errors->first('direccion') }}</strong>
 									</span>
 								@endif
 							</div>
@@ -176,6 +174,7 @@
 								<button type="submit" class="btn btn-primary">
 									<i class="fa fa-btn fa-plus-circle"></i> Guardar
 								</button>
+								<input type="hidden" name="opcion" value="crear_cuenta"/>
 							</div>
 						</div>
 

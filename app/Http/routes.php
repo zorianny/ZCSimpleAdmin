@@ -18,5 +18,6 @@ Route::get('/', function () {
 Route::auth();
 
 Route::get('/home', 'HomeController@index');
+Route::get('/correoZimbra/modify', 'Zimbra\SoapZimbraAdminController@modify')->name( 'correoZimbra.modify');
 
 Route::resource('correoZimbra', 'Zimbra\SoapZimbraAdminController', ['only' => ['index', 'store', 'create']]);

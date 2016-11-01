@@ -22,10 +22,24 @@ class AppServiceProvider extends ServiceProvider
 
     	});
 			
-			Validator::extend('alpha_spaces', function ($attribute, $value) {
+		Validator::extend('alpha_spaces', function ($attribute, $value) {
 
         // This will only accept alpha and spaces. 
         return preg_match('/^[\pL\s]+$/u', $value); 
+
+    	});
+		
+		Validator::extend('cuenta_punto', function ($attribute, $value) {
+
+        // This will only accept alpha, numbers and spaces. 
+        return preg_match('/^[\pL\pN]{1,}\.[\pL\pN]+$/u', $value); 
+
+    	});
+		
+		Validator::extend('alpha_num_special_char', function ($attribute, $value) {
+
+        // This will only accept alpha, numbers and spaces. 
+        return preg_match('/^[\pL\pN\.\-\s]+$/u', $value); 
 
     	});
     }
