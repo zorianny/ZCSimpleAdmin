@@ -1,2 +1,2 @@
 # ZCSimpleAdmin
-Zimbra Community Simple Administrator
+Zimbra Community Simple Administrator.
